@@ -1,0 +1,217 @@
+/* -------------------- minimal css reset */
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  background-color: var(--color-lightest);
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+/* -------------------- minimal css reset */
+
+:root {
+  --color-darkest: #000000;
+  --color-dark: #333333;
+  --color-lightest: #FFFFFF;
+  --color-light: #EFEFEF;
+
+  --color-1: #72C3DC;
+  --color-2: #2B8EAD;
+  --color-3: #6F98A8;
+  --color-4: #BFBFBF;
+  --color-5: #2F454E;
+}
+
+#app {
+  --app-bg: var(--color-lightest);
+  background-color: var(--app-bg);
+  min-height: 100vh;
+}
+
+/* -------------------- header */
+header {
+  --border-bottom: transparent;
+  --border-size: 0px;
+  --header-size: 1.5rem;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: var(--header-size);
+  color: var(--color-lightest);
+  background-color: var(--color-dark);
+  border-bottom: var(--border-size) solid var(--border-bottom);
+}
+/* -------------------- header */
+
+
+/* -------------------- main */
+main {
+  padding: 0.5rem 1rem;
+  display: grid;
+  grid-template-areas:
+    "controls"
+    "item-1"
+    "item-2"
+    "item-3"
+    "item-4"
+    "item-5"
+    "item-6"
+    "item-7"
+    "item-8"
+    "item-9";
+    row-gap: 0.25rem;
+}
+/* -------------------- main */
+
+
+/* -------------------- items */
+.item {
+  --border-color: transparent;
+  --bg-color: var(--color-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: var(--color-dark);
+  background-color: var(--bg-color);
+  border-left: 8px solid var(--border-color);
+}
+
+.item-variant-1 {
+  --border-color: var(--color-1);
+}
+.item-variant-2 {
+  --border-color: var(--color-2);
+}
+.item-variant-3 {
+  --border-color: var(--color-3);
+}
+.item-variant-4 {
+  --border-color: var(--color-4);
+}
+.item-variant-5 {
+  --border-color: var(--color-5);
+}
+/* -------------------- items */
+
+
+/* -------------------- controls */
+.controls {
+  grid-area: controls;
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+.control {
+  padding: 1rem;
+  color: var(--color-lightest);
+  text-transform: uppercase;
+  background-color: var(--color-1);
+  border-radius: 4px;
+  border: none;
+  border-bottom: 4px solid var(--color-2);
+  min-width: 25%;
+}
+/* -------------------- controls */
+
+footer {
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+@media screen and (min-width: 960px) {
+  #app {
+    --app-bg: var(--color-light);
+  }
+
+  /* -------------------- header */
+  header {
+    --border-bottom: var(--color-4);
+    --border-size: 4px;
+    --header-size: 3rem;
+    color: var(--color-dark);
+    background-color: transparent;
+  }
+  /* -------------------- header */
+
+  main {
+    padding: 0;
+    grid-template-areas:
+      "item-1 item-2 item-3 controls"
+      "item-4 item-5 item-6 ."
+      "item-7 item-8 item-9 .";
+    gap: 0;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+  .control {
+    width: 100%;
+    max-width: 25vh;
+  }
+
+  .item {
+    color: var(--color-lightest);
+    font-size: 8rem;
+    aspect-ratio: 4 / 3;
+  }
+
+  .item-variant-1,
+  .item-variant-2,
+  .item-variant-3,
+  .item-variant-4,
+  .item-variant-5 {
+    --border-color: transparent;
+  }
+
+  .item-variant-1 {
+    --bg-color: var(--color-1);
+  }
+  .item-variant-2 {
+    --bg-color: var(--color-2);
+  }
+  .item-variant-3 {
+    --bg-color: var(--color-3);
+  }
+  .item-variant-4 {
+    --bg-color: var(--color-4);
+  }
+  .item-variant-5 {
+    --bg-color: var(--color-5);
+  }
+
+  .item-1 {
+    grid-area: item-1;
+  }
+  .item-2 {
+    grid-area: item-2;
+  }
+  .item-3 {
+    grid-area: item-3;
+  }
+  .item-4 {
+    grid-area: item-4;
+  }
+  .item-5 {
+    grid-area: item-5;
+  }
+  .item-6 {
+    grid-area: item-6;
+  }
+  .item-7 {
+    grid-area: item-7;
+  }
+  .item-8 {
+    grid-area: item-8;
+  }
+  .item-9 {
+    grid-area: item-9;
+  }
+}
