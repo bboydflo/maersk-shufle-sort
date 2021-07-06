@@ -6,7 +6,7 @@ This project has been bootstrapped with [vite](https://vitejs.dev)
 
 ## Check demo
 
-You can see a live preview of this project [here]()
+You can see a live preview of this project [here](https://florin-maersk-shuffle-sort.netlify.app/)
 
 ## Installation
 
