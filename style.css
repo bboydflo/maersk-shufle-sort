@@ -50,18 +50,7 @@ header {
 main {
   padding: 0.5rem 1rem;
   display: grid;
-  /* grid-template-areas:
-    "controls"
-    "item-1"
-    "item-2"
-    "item-3"
-    "item-4"
-    "item-5"
-    "item-6"
-    "item-7"
-    "item-8"
-    "item-9"; */
-    row-gap: 0.25rem;
+  row-gap: 0.25rem;
 }
 /* -------------------- main */
 
@@ -153,10 +142,6 @@ footer {
 
   main {
     padding: 0;
-    /* grid-template-areas:
-      "item-1 item-2 item-3 controls"
-      "item-4 item-5 item-6 ."
-      "item-7 item-8 item-9 ."; */
     gap: 0;
   }
 
