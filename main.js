@@ -3,61 +3,92 @@ import arrayShuffle from 'array-shuffle'
 import './style.css'
 
 (() => {
+  const desktopMediaQuery = 'screen and (min-width: 960px)'
 
-  // insert blank stylesheet into page
-  const styleTag = document.createElement('style')
-  document.head.appendChild(styleTag)
+  // insert blank stylesheets into page
+  const styleTag1 = document.createElement('style') // style tag to update styles related to items order
+  const styleTag2 = document.createElement('style') // style tag to update styles related to items color variant
+  document.head.appendChild(styleTag1)
+  document.head.appendChild(styleTag2)
 
-  // const items = Array.from({ length: 9 }, (_, i) => i + 1)
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9] // Array.from({ length: 9 }, (_, i) => i + 1)
+  let currentItemsOrder = items.concat([])
 
-  const initialVariants = items.reduce((prev, curr, i) => {
+  const getIsDesktop = () => window.matchMedia(desktopMediaQuery).matches
 
+  const getVariants = (items, _isOnDesktop) => {
+    return items.reduce((prev, curr, i) => {
+      if (_isOnDesktop) {
+        return `
+          ${prev}
 
-  }, '')
+          .item-${curr} {
+            --border-color: transparent;
+            background-color: var(--color-${i % 5 + 1});
+          }
+        `
+      }
 
-  const updateStyles = (styles) => {
-    styleTag.innerHTML = styles
+      return `
+        ${prev}
+
+        .item-${curr} {
+          --border-color: var(--color-${i % 5 + 1});
+        }
+      `
+    }, _isOnDesktop ? `` : `.item { --bg-color: var(--color-light); }`)
   }
 
-  const isDesktop = () => window.matchMedia('screen and (min-width: 960px)')
+  const updateStyles = (tag, styles) => tag.innerHTML = styles
 
-  const computeStyles = (items) => {
-
-    // change desktop styles -> items order
-    if (isDesktop()) {
-      return items.reduce((prev, curr, i) => {
-        return prev + `
-        .item-${i+1} {
-          grid-area: item-${curr}
-        }`
-      }, '')
+  const computeItemsOrder = (items, isOnDesktop) => {
+    if (isOnDesktop) {
+      return `
+        main {
+          grid-template-areas:
+            "item-${items[0]} item-${items[1]} item-${items[2]} controls"
+            "item-${items[3]} item-${items[4]} item-${items[5]} ."
+            "item-${items[6]} item-${items[7]} item-${items[8]} ."
+          ;
+        }
+      `
     }
 
     return `
       main {
         grid-template-areas:
           "controls"
-          ${items.reduce((prev, curr, i) => {
-            return prev + `
-              "item-${curr}${i === items.length - 1 ? ';' : ''}"
+          ${items.reduce((prev, curr) => {
+            return `
+              ${prev}
+
+              "item-${curr}"
             `
           }, '')}
+        ;
       }
     `
   }
 
-  const handleShuffle = (event) => {
+  const handleShuffle = (event, isOnDesktop) => {
     if (!event.target.matches('.shuffle')) return
 
-    const styles = computeStyles(arrayShuffle(items))
-    updateStyles(styles)
+    // shuffle items and save order
+    currentItemsOrder = arrayShuffle(items)
+
+    // TODO: extract common code?
+    const styles = computeItemsOrder(currentItemsOrder, isOnDesktop)
+    updateStyles(styleTag1, styles)
   }
-  const handleSort = (event) => {
+  const handleSort = (event, isOnDesktop) => {
       if (!event.target.matches('.sort')) return
 
-      const styles = computeStyles(items.sort())
-      updateStyles(styles)
+      // reset items and save order
+      currentItemsOrder = items.sort()
+
+      // TODO: extract common code?
+      const styles = computeItemsOrder(currentItemsOrder, isOnDesktop)
+      updateStyles(styleTag1, styles)
   }
 
   // render app
@@ -69,24 +100,40 @@ import './style.css'
         <button class='control shuffle'>Shuffle</button>
         <button class='control sort'>Sort</button>
       </div>
-      <div class='item item-1 item-variant-2'>1</div>
-      <div class='item item-2 item-variant-4'>2</div>
-      <div class='item item-3 item-variant-1'>3</div>
-      <div class='item item-4 item-variant-3'>4</div>
-      <div class='item item-5 item-variant-2'>5</div>
-      <div class='item item-6 item-variant-4'>6</div>
-      <div class='item item-7 item-variant-1'>7</div>
-      <div class='item item-8 item-variant-2'>8</div>
-      <div class='item item-9 item-variant-1'>9</div>
+      <div class='item item-1'>1</div>
+      <div class='item item-2'>2</div>
+      <div class='item item-3'>3</div>
+      <div class='item item-4'>4</div>
+      <div class='item item-5'>5</div>
+      <div class='item item-6'>6</div>
+      <div class='item item-7'>7</div>
+      <div class='item item-8'>8</div>
+      <div class='item item-9'>9</div>
     </main>
 
     <footer>Shuffle and Sort by <a href='https://github.com/bboydflo/maersk-shufle-sort' _target='blank'>Florin Onciu</a></footer>
   `
 
+  // check initial screen
+  const isOnDesktop = getIsDesktop()
+
+  // set initial order and color variants for each item in a random fashion
+  updateStyles(styleTag1, computeItemsOrder(items, isOnDesktop))
+  updateStyles(styleTag2, getVariants(items, isOnDesktop))
+
   // setup event listeners
   document.addEventListener('click', function (event) {
-    handleShuffle(event)
-    handleSort(event)
+
+    // are we on desktop or not?
+    const _isOnDesktop = getIsDesktop()
+
+    handleShuffle(event, _isOnDesktop)
+    handleSort(event, _isOnDesktop)
+  })
+
+  window.matchMedia(desktopMediaQuery).addEventListener('change', (query) => {
+    updateStyles(styleTag1, computeItemsOrder(currentItemsOrder, query.matches))
+    updateStyles(styleTag2, getVariants(currentItemsOrder, query.matches))
   })
 })()
 
